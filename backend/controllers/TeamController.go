@@ -2,10 +2,10 @@ package controllers
 
 import (
 	"backend/models"
+	"backend/utils"
+	"github.com/gin-gonic/gin"
 	"os"
 	"strconv"
-
-	"github.com/gin-gonic/gin"
 )
 
 func SelectTeams(ctx *gin.Context) {
@@ -35,14 +35,16 @@ func CreateTeam(ctx *gin.Context) {
 		ctx.JSON(200, res)
 		return
 	}
-	fh, err2 := ctx.FormFile("logo_img")
+	fh, err2 := ctx.FormFile("img")
 	if err2 != nil {
 		res.Status = 0
 		res.Message = "Upload Img Failed!! Try Again"
 		ctx.JSON(200, res)
 		return
 	}
-	dst := "../frontend/public/img/team_img/" + fh.Filename
+	filename := fh.Filename
+	filename = utils.GetOnlyFileName(filename)
+	dst := "../frontend/public/img/team_img/" + filename
 	err = ctx.SaveUploadedFile(fh, dst)
 	if err != nil {
 		res.Status = 0
@@ -50,7 +52,7 @@ func CreateTeam(ctx *gin.Context) {
 		ctx.JSON(200, res)
 		return
 	}
-	team.Logo = fh.Filename
+	team.Logo = filename
 	err = models.CreateTeam(&team)
 	if err != nil {
 		res.Status = 0
@@ -60,6 +62,7 @@ func CreateTeam(ctx *gin.Context) {
 	}
 	res.Status = 1
 	res.Message = "Create Success!"
+	res.Obj = team
 	ctx.JSON(200, res)
 }
 
@@ -116,7 +119,6 @@ func RemoveTeam(ctx *gin.Context) {
 		ctx.JSON(200, res)
 		return
 	}
-
 	logoName := team.Logo
 	if logoName != "" {
 		dst := "../frontend/public/img/team_img/" + logoName

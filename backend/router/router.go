@@ -2,7 +2,7 @@ package router
 
 import (
 	"backend/controllers"
-
+	"backend/models"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,6 +15,8 @@ func SetRouter() *gin.Engine {
 		user.POST("checkLogin", controllers.CheckLogin)
 		user.POST("register", controllers.UserReg)
 		user.GET("selectAll", controllers.SelectAll)
+		user.GET("getLogining", controllers.GetLoginingUser)
+		user.GET("logout", controllers.Logout)
 	}
 
 	player := r.Group("player")
@@ -25,6 +27,26 @@ func SetRouter() *gin.Engine {
 		player.GET("remove", controllers.Remove)
 		player.POST("update", controllers.UpdatePlayer)
 		player.GET("teamPlayer", controllers.TeamPlayers)
+
+		player.POST("testSub", func(ctx *gin.Context) {
+			s := ctx.PostForm("username")
+
+			player := models.PlayerInfo{}
+			err := ctx.ShouldBind(&player)
+
+			if err != nil {
+				ctx.JSON(200, gin.H{
+					"message": "bind error",
+					"error":   err.Error(),
+				})
+				return
+			}
+			ctx.JSON(200, gin.H{
+				"cnname": s,
+				"obj":    player,
+			})
+
+		})
 	}
 
 	team := r.Group("team")
@@ -34,6 +56,21 @@ func SetRouter() *gin.Engine {
 		team.GET("selectById", controllers.SelectTeamById)
 		team.POST("updateTeam", controllers.UpdateTeam)
 		team.GET("deleteTeam", controllers.RemoveTeam)
+
+		team.POST("insertTeam2", func(ctx *gin.Context) {
+			team := models.TeamInfo{}
+			err := ctx.ShouldBind(&team)
+			tname := ctx.PostForm("tname")
+			if err != nil {
+				ctx.String(200, err.Error())
+				return
+			}
+
+			ctx.JSON(200, gin.H{
+				"team name": tname,
+				"obj":       team,
+			})
+		})
 	}
 
 	favor := r.Group("favor")

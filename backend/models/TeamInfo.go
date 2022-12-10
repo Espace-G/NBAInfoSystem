@@ -8,7 +8,7 @@ type TeamInfo struct {
 	Tcity string `json:"tcity" form:"tcity"`
 	Tzone string `json:"tzone" form:"tzone"`
 	Arena string `json:"arena" form:"arena"`
-	Logo  string `json:"logo" form:"logo"`
+	Logo  string `json:"logo" form:"logo_img"`
 }
 
 // 可选条件查询球队

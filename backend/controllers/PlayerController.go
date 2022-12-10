@@ -2,10 +2,10 @@ package controllers
 
 import (
 	"backend/models"
+	"backend/utils"
+	"github.com/gin-gonic/gin"
 	"os"
 	"strconv"
-
-	"github.com/gin-gonic/gin"
 )
 
 func SelectPlayers(ctx *gin.Context) {
@@ -50,7 +50,6 @@ func SelectPlayerById(ctx *gin.Context) {
 
 func InsertPlayer(ctx *gin.Context) {
 	res := models.Dto{}
-
 	player := models.PlayerInfo{}
 	err := ctx.ShouldBind(&player)
 	if err != nil {
@@ -67,8 +66,9 @@ func InsertPlayer(ctx *gin.Context) {
 		ctx.JSON(200, res)
 		return
 	}
-
-	dst := "../frontend/public/img/player_img/" + fh.Filename
+	filename := fh.Filename
+	filename = utils.GetOnlyFileName(filename)
+	dst := "../frontend/public/img/player_img/" + filename
 	err2 = ctx.SaveUploadedFile(fh, dst)
 	if err2 != nil {
 		res.Status = 0
@@ -76,7 +76,7 @@ func InsertPlayer(ctx *gin.Context) {
 		ctx.JSON(200, res)
 		return
 	}
-	player.ImgPath = fh.Filename
+	player.ImgPath = filename
 
 	err2 = models.InsertPlayer(&player)
 	if err2 != nil {
@@ -140,6 +140,7 @@ func UpdatePlayer(ctx *gin.Context) {
 	}
 	res.Message = "Update Success!"
 	res.Status = 1
+	res.Obj = player
 	ctx.JSON(200, res)
 }
 

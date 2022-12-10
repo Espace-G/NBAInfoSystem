@@ -28,6 +28,10 @@ func InsertUser(insertUser UserInfo) (err error) {
 func SelectAll() (userSlice []UserInfo, err error) {
 	userSlice = make([]UserInfo, 0)
 	err = dao.DB.Find(&userSlice).Error
+	return
+}
 
+func QueryUserByID(uid int) (user UserInfo, err error) {
+	err = dao.DB.Where("uid = ?", uid).First(&user).Error
 	return
 }
