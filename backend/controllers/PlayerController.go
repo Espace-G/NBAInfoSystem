@@ -10,6 +10,7 @@ import (
 
 func SelectPlayers(ctx *gin.Context) {
 	res := models.Dto{}
+	//定义一个map集合存放查询参数
 	params := make(map[string]string, 2)
 	orderby := ctx.Query("orderby")
 	search := ctx.Query("search")
@@ -58,7 +59,6 @@ func InsertPlayer(ctx *gin.Context) {
 		ctx.JSON(200, res)
 		return
 	}
-
 	fh, err2 := ctx.FormFile("img")
 	if err2 != nil {
 		res.Status = 0
@@ -77,16 +77,14 @@ func InsertPlayer(ctx *gin.Context) {
 		return
 	}
 	player.ImgPath = filename
-
 	err2 = models.InsertPlayer(&player)
 	if err2 != nil {
 		res.Message = "Sava Data Failed!!Try Again"
 		res.Status = 0
-		ctx.JSON(200, res)
-		return
+	} else {
+		res.Message = "Create Success!!"
+		res.Status = 1
 	}
-	res.Message = "Create Success!!"
-	res.Status = 1
 	ctx.JSON(200, res)
 }
 
@@ -94,11 +92,9 @@ func Remove(ctx *gin.Context) {
 	res := models.Dto{}
 	s := ctx.Query("id")
 	pid, _ := strconv.Atoi(s)
-	//先删除照片文件
 	player, _ := models.SelectPlayerById(pid)
-	s2 := player.ImgPath
-	if s2 != "" {
-		filepath := "../frontend/public/img/player_img/" + s2
+	if player.ImgPath != "" {
+		filepath := "../frontend/public/img/player_img/" + player.ImgPath
 		err := os.Remove(filepath)
 		if err != nil {
 			res.Obj = 0
@@ -108,7 +104,6 @@ func Remove(ctx *gin.Context) {
 			return
 		}
 	}
-
 	err := models.RemovePlayer(pid)
 	if err != nil {
 		res.Status = 0

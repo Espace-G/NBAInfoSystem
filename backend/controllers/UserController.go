@@ -3,6 +3,7 @@ package controllers
 import (
 	"backend/models"
 	"backend/utils"
+	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -78,8 +79,10 @@ func UserReg(ctx *gin.Context) {
 	}
 	err = models.InsertUser(regUser)
 	if err != nil {
-		res.Message = "Register Failed!Try Again."
+		res.Message = err.Error()
 		res.Status = 0
+		//删除刚刚存储的文件
+		os.Remove(dst)
 		ctx.JSON(200, res)
 	} else {
 		res.Message = "Register Success!!"
@@ -125,6 +128,8 @@ func GetLoginingUser(ctx *gin.Context) {
 		return
 	}
 
+	//若当前有用户登录，延长userId的Cookie时间
+	ctx.SetCookie("userId", strconv.Itoa(login.Uid), 3600, "/", "localhost", false, true)
 	res.Obj = login
 	res.Message = "Success"
 	res.Status = 1

@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"backend/models"
-	"backend/utils"
 	"github.com/gin-gonic/gin"
 	"os"
 	"strconv"
@@ -43,7 +42,7 @@ func CreateTeam(ctx *gin.Context) {
 		return
 	}
 	filename := fh.Filename
-	filename = utils.GetOnlyFileName(filename)
+	//filename = utils.GetOnlyFileName(filename)
 	dst := "../frontend/public/img/team_img/" + filename
 	err = ctx.SaveUploadedFile(fh, dst)
 	if err != nil {

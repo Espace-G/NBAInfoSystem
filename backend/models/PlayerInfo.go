@@ -14,16 +14,16 @@ type PlayerInfo struct {
 	Tid     int16   `json:"tid" form:"tid"`
 }
 
-//根据params的值有条件的查询球员信息，params为空时，查询所有球员信息，按ID进行排序
 func SelectPlayers(params map[string]string) (players []PlayerInfo, err error) {
-	players = make([]PlayerInfo, 0)
-
+	//查询有三种情况，无参数直接查询所有球员，
+	//有orderby参数进行排序查询，有search参数进行字符串匹配查询
 	if params["orderby"] == "" && params["search"] == "" {
 		err = dao.DB.Find(&players).Error
 	} else if params["orderby"] != "" {
 		dao.DB.Order(params["orderby"]).Find(&players)
 	} else {
-		dao.DB.Where("cn_name like ? or en_name like ?", "%"+params["search"]+"%", "%"+params["search"]+"%").Find(&players)
+		dao.DB.Where("cn_name like ? or en_name like ?",
+			"%"+params["search"]+"%", "%"+params["search"]+"%").Find(&players)
 	}
 	return
 }

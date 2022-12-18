@@ -90,13 +90,7 @@
             
           </div><!--//tab-pane-->
         </div>
-        <footer class="app-footer">
-          <div class="container text-center py-3">
-            <small>
-              chen
-            </small>
-          </div>
-        </footer><!--//app-footer-->
+        
       </div>
     </div>
   </div>
@@ -189,7 +183,6 @@ import axios from 'axios'
         })
       },
       follow(params){
-        //alert(params)
         var uid
         axios.get("/api/user/getLogining").then(response => {
           if(response.data.obj == null){
@@ -205,10 +198,7 @@ import axios from 'axios'
                 uid:uid,
                 id:params
               }
-            }).then(res => {
-              //console.log(res.data)
-              this.getFavor()
-            })
+            }).then(this.getFavor())
           }
         })
       },
@@ -239,6 +229,7 @@ import axios from 'axios'
         this.$router.push({
         path:"/teamPlayer",
         query:{
+          utype:this.$route.query.utype,
           tid:params
         }})
       },
@@ -279,8 +270,10 @@ import axios from 'axios'
       }
     },
     mounted(){
+      if(this.$route.query.utype == 0){
+        this.getFavor();
+      }
       this.getTeams()
-      this.getFavor()
     },
     watch:{
       $route(){

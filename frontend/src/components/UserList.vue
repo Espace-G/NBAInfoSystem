@@ -60,11 +60,6 @@ import axios from 'axios'
           this.initPage()
         })
       },
-      watch:{
-        $route(){
-          this.getList()
-        }
-      }
     },
     mounted(){
       this.getList()

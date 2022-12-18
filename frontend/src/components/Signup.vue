@@ -21,6 +21,7 @@
           <label class="sr-only" for="signin-password">Head Shot</label>
           <input type="file"  ref="img" name="img" class="form-control " placeholder="Img">
         </div><!--//form-group-->
+        <div style="color:red">{{ errorMsg }}</div>
         <div class="text-center">
           <button class="btn app-btn-primary w-100 theme-btn mx-auto" @click="signup">Sign Up</button>
         </div>
@@ -37,6 +38,7 @@ import axios from 'axios'
       return {
         username:"",
         password:"",
+        errorMsg:"",
       }
     },
     methods:{
@@ -59,7 +61,12 @@ import axios from 'axios'
           console.log(response.data)
           if(response.data.status == 0){
             //创建失败显示提示信息
-            this.errorMsg = "Error Data!Please Check Again!"
+            var msg = response.data.message
+            if(msg.indexOf("UNIQUENAME") != -1){
+              this.errorMsg = "Username has been registered"
+            }else{
+              this.errorMsg = response.data.message
+            }
           }else{
             this.$router.push("/login")
           }

@@ -15,7 +15,8 @@
                       <button type="button" class="btn app-btn-secondary" @click="myfavor">My Favors</button>
                     </div>
                     <div class="col-auto" v-show="(this.utype == 1)">
-                      <button type="button" class="btn app-btn-secondary" @click="create">Create Player</button>
+                      <button type="button" class="btn app-btn-secondary" 
+                      @click="create">Create Player</button>
                     </div>
                     <div class="col-auto">
                       <button type="button" class="btn app-btn-secondary" @click="order('age')">Order by Age</button>
@@ -27,7 +28,7 @@
                       <button type="button" class="btn app-btn-secondary" @click="order('weight')">Order by Weight</button>
                     </div>
                     <div class="col-auto">
-                      <input v-model="searchText" type="text" id="search-orders" name="searchorders" class="form-control search-orders" placeholder="Player Name">
+                      <input v-model="searchText" type="text" class="form-control" placeholder="Player Name">
                     </div>
                     <div class="col-auto">
                       <button type="button" class="btn app-btn-secondary" @click="search">Search</button>
@@ -63,7 +64,8 @@
                     <tbody>
                       <tr v-for="player in (players).slice(down,up)" :key="player.pid">
                         <td class="cell">
-                          <img style="height:40px" :src="('./img/player_img/' + player.imgpath)" alt="player_img">
+                          <img style="height:40px" :src="('./img/player_img/' + player.imgpath)" 
+                          alt="player_img">
                         </td>
                         <td class="cell">{{ player.cnname }}</td>
                         <td class="cell">{{ player.enname }}</td>
@@ -71,14 +73,18 @@
                         <td class="cell">{{ player.weight }}</td>
                         <td class="cell">{{ player.nation }}</td>
                         <td class="cell">{{ player.age }}</td>            
+                        <!-- 收藏操作 -->
                         <td class="cell" v-show="(this.utype == 0)">
-                          <a class="btn-sm app-btn-secondary" @click="follow(player.pid)" v-if="!this.favorPid.includes(player.pid)">
+                          <a class="btn-sm app-btn-secondary" @click="follow(player.pid)" 
+                          v-if="!this.favorPid.includes(player.pid)">
                             Follow
                           </a>
-                          <a class="btn-sm app-btn-secondary" @click="unfollow(player.pid)" v-if="this.favorPid.includes(player.pid)">
+                          <a class="btn-sm app-btn-secondary" @click="unfollow(player.pid)" 
+                          v-if="this.favorPid.includes(player.pid)">
                             Unfollow
                           </a>
                         </td>
+                        <!-- 更新信息操作 -->
                         <td class="cell" v-show="(this.utype == 1)">
                           <a class="btn-sm app-btn-secondary" @click="edit(player.pid)" >
                             Edit
@@ -98,13 +104,6 @@
             
           </div><!--//tab-pane-->
         </div>
-        <footer class="app-footer">
-          <div class="container text-center py-3">
-            <small>
-              chen
-            </small>
-          </div>
-        </footer><!--//app-footer-->
       </div>
     </div>
   </div>
@@ -129,7 +128,6 @@ import axios from 'axios'
     methods:{
       getPlayers(){
         axios.get("/api/player/selectPlayers").then(response => {
-          //console.log(response)
           this.players = response.data.obj
           this.currentPage = 1
           this.initPage()

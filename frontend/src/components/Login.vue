@@ -10,12 +10,12 @@
         <div class="email mb-3">
           <label class="sr-only" for="signin-email">Username</label>
           <input id="signin-email" name="signin-email" type="text" class="form-control " placeholder="Username" 
-          v-model="loginUsername" required>
+          v-model="loginUsername">
         </div><!--//form-group-->
         <div class="password mb-3">
           <label class="sr-only" for="signin-password">Password</label>
           <input id="signin-password" name="signin-password" type="password" class="form-control signin-password" placeholder="Password" 
-          v-model="loginPassword" required>
+          v-model="loginPassword">
           <p style="color:red "> {{ errMsg }}</p>
           <div class="extra mt-3 row justify-content-between">
           </div><!--//extra-->

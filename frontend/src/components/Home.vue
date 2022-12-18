@@ -29,9 +29,8 @@
           </div><!--//col-->
           <div class="app-utilities col-auto">
             <div class="app-utility-item app-user-dropdown dropdown">
-              <a class="dropdown-toggle" id="user-dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">
-                <img :src="headshot" alt="user profile">
-              </a>
+              <img :src="headshot" alt="user profile"> &nbsp;
+              <span > {{ loginUser.username }}</span> &nbsp;
               <button class="btn app-btn-primary" @click="login" v-show="!loginUser.uid">Log In</button>
               <button class="btn app-btn-primary" @click="logout" v-show="loginUser.uid">Log Out</button>
             </div><!--//app-user-dropdown--> 
@@ -91,7 +90,7 @@
       data(){
         return{
           "headshot" : "./img/headshot/stars.jpg",
-          "loginUser" : {uid:0}, 
+          "loginUser" : {uid:0,utype:0}, 
           "errorMsg" : ""
         }
       },
@@ -105,13 +104,13 @@
             console.log(response)
             if(response.data.status == 1){
               //成功退出
-              this.loginUser = {uid : 0}
+              this.loginUser = {uid : 0,utype : 0}
             }else{
               //console.log(response.data.message)
             }
             this.headshot = "./img/headshot/stars.jpg"
-            this.getLogin()
-            this.$router.push("/")
+            this.getLogin() 
+            this.$router.push("/home")
           })
         }
       },
@@ -131,6 +130,7 @@
         this.$router.push({
           path:"/player",
           query:{
+            //传递当前登录的用户类型，没有用户登录为普通用户类型
             utype:this.loginUser.utype
           }
         })

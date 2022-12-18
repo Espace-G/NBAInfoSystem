@@ -89,9 +89,7 @@ import axios from 'axios'
       create(){
         let form = new FormData()
         let img = this.$refs.img
-        if(img.files[0] != null){
-          form.append("img",img.files[0])
-        }
+        if(img.files[0] != null){ form.append("img",img.files[0]) }
         form.append("username","zhangsan")
         form.append("cnname",this.createPlayer.cnname)
         form.append("enname",this.createPlayer.enname)
@@ -110,9 +108,8 @@ import axios from 'axios'
         }
         axios(options).then(response => {
           if(response.data.status == 0){
-            //创建失败显示提示信息
             this.errorMsg = "Error Data!Please Check Again!"
-          }
+          }else{ this.$router.go(-1) }
         })
       },  
       getPlayer(){
@@ -166,7 +163,7 @@ import axios from 'axios'
           tid:0,
           cnname:"",
           enname:"",
-          nation:"",
+          nation:"United States" ,
           height:"",
           weight:"",
           age:"",

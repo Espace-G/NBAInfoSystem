@@ -27,26 +27,6 @@ func SetRouter() *gin.Engine {
 		player.GET("remove", controllers.Remove)
 		player.POST("update", controllers.UpdatePlayer)
 		player.GET("teamPlayer", controllers.TeamPlayers)
-
-		player.POST("testSub", func(ctx *gin.Context) {
-			s := ctx.PostForm("username")
-
-			player := models.PlayerInfo{}
-			err := ctx.ShouldBind(&player)
-
-			if err != nil {
-				ctx.JSON(200, gin.H{
-					"message": "bind error",
-					"error":   err.Error(),
-				})
-				return
-			}
-			ctx.JSON(200, gin.H{
-				"cnname": s,
-				"obj":    player,
-			})
-
-		})
 	}
 
 	team := r.Group("team")

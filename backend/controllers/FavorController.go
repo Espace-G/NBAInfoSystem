@@ -34,21 +34,18 @@ func CreateFavor(ctx *gin.Context) {
 		//球队记录
 		favor := models.FavorTeam{}
 		s := ctx.Query("uid")
-		uid, _ := strconv.Atoi(s)
+		favor.Uid, _ = strconv.Atoi(s)
 		s = ctx.Query("id")
-		tid, _ := strconv.Atoi(s)
-		favor.Uid = uid
-		favor.Tid = tid
+		favor.Tid, _ = strconv.Atoi(s)
 		err := models.CTFavor(favor)
 		if err != nil {
 			res.Status = 0
 			res.Message = "Create Team Favor Failed!"
-			ctx.JSON(200, res)
 		} else {
 			res.Status = 1
 			res.Message = "Success!"
-			ctx.JSON(200, res)
 		}
+		ctx.JSON(200, res)
 	} else {
 		res.Status = 0
 		res.Message = "Error Parameter"
